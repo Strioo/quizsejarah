@@ -139,6 +139,7 @@ const questions = [
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons"); // perbaikan disini
 const nextButton = document.getElementById("next-btn"); // perbaikan disini
+const backButton = document.getElementById("back-btn");
 
 function startQuiz(){
     currentQuestionIndex = 0;
@@ -194,10 +195,14 @@ function selectAnswer(e){
 
 function showScore(){
     resetState();
-    questionElement.innerHTML = `Youe scored ${score} out of ${questions.length}!`;
-    nextButton.innerHTML = "Play Again";
+    questionElement.innerHTML = `Skor Kamu ${score} out of ${questions.length}!`;
+    nextButton.innerHTML = "Mulai lagi";
     nextButton.style.display = "block"
+    backButton.style.display = "block";
+    backButton.innerHTML = "Kembali ke Materi";
+    backButton.style.display = "block"
 }
+
 
 function handleNextButton(){
     currentQuestionIndex++;
@@ -208,6 +213,10 @@ function handleNextButton(){
     }
 }
 
+backButton.addEventListener("click", ()=>{
+    redirectToIndexPage();
+})
+
 nextButton.addEventListener("click", ()=>{
     if(currentQuestionIndex < questions.length){
        handleNextButton(); 
@@ -216,5 +225,61 @@ nextButton.addEventListener("click", ()=>{
     }
 })
 
+function redirectToIndexPage() {
+    window.location.href = "index.html";
+}
 
 startQuiz();
+
+
+function scrollToContent() {
+    gsap.to('#content-section', {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: 'power2.out',
+    });
+
+    gsap.to(window, {
+        scrollTo: {
+            y: '#content-section',
+            offsetY: 50,
+        },
+        duration: 1.5,
+        ease: 'power4.out',
+    });
+}
+
+document.addEventListener('scroll', function () {
+    var contentSection = document.getElementById('content-section');
+    var rect = contentSection.getBoundingClientRect();
+
+    if (rect.top < window.innerHeight && rect.bottom >= 0) {
+        gsap.to('#content-section', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power2.out',
+        });
+    }
+});
+
+function animateWelcomeText() {
+    gsap.fromTo(
+        '.fun-heading',
+        {
+            opacity: 0,
+            textShadow: '0 0 10px rgba(255, 255, 255, 0.8)',
+        },
+        {
+            opacity: 1,
+            textShadow: '0 0 30px rgba(255, 255, 255, 1)',
+            duration: 1.5,
+            ease: 'power2.out',
+        }
+    );
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    animateWelcomeText();
+});
